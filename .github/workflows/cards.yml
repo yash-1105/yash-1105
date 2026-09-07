@@ -1,0 +1,121 @@
+# Generates every github-readme-stats card (stats, top languages, pin cards) and the
+# activity graph as static SVGs in `profile/`, one dark and one light variant each,
+# and commits them to `main`. The README embeds them from:
+#   https://raw.githubusercontent.com/yash-1105/yash-1105/main/profile/<name>-dark.svg
+#   https://raw.githubusercontent.com/yash-1105/yash-1105/main/profile/<name>-light.svg
+#
+# Why static SVGs: the public github-readme-stats instance is best-effort (its README
+# says so and recommends this Action), and the public activity-graph instance is
+# currently disabled. Generating in Actions keeps the cards rendering regardless.
+name: Profile cards
+
+on:
+  schedule:
+    - cron: "0 3 * * *"        # daily, 03:00 UTC
+  workflow_dispatch:           # run manually from the Actions tab
+
+permissions:
+  contents: write
+
+concurrency:
+  group: profile-cards
+  cancel-in-progress: true
+
+jobs:
+  cards:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Stats card stats-dark.svg
+        uses: readme-tools/github-readme-stats-action@v2
+        with:
+          card: stats
+          options: username=yash-1105&show_icons=true&rank_icon=percentile&include_all_commits=true&ring_color=A78BFA&hide_border=true&bg_color=00000000&title_color=22D3EE&icon_color=A78BFA&text_color=CBD5E1
+          path: profile/stats-dark.svg
+          token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Top languages langs-dark.svg
+        uses: readme-tools/github-readme-stats-action@v2
+        with:
+          card: top-langs
+          options: username=yash-1105&layout=compact&langs_count=6&hide=jupyter%20notebook,html,css,javascript,shell,makefile,dockerfile,plpgsql,procfile&hide_border=true&bg_color=00000000&title_color=22D3EE&icon_color=A78BFA&text_color=CBD5E1
+          path: profile/langs-dark.svg
+          token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Pin card pin-transport-sahayak-dark.svg
+        uses: readme-tools/github-readme-stats-action@v2
+        with:
+          card: pin
+          options: username=yash-1105&repo=transport-sahayak&description_lines_count=2&hide_border=true&bg_color=00000000&title_color=22D3EE&icon_color=A78BFA&text_color=CBD5E1
+          path: profile/pin-transport-sahayak-dark.svg
+          token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Pin card pin-rxconcile-dark.svg
+        uses: readme-tools/github-readme-stats-action@v2
+        with:
+          card: pin
+          options: username=yash-1105&repo=rxconcile&description_lines_count=2&hide_border=true&bg_color=00000000&title_color=22D3EE&icon_color=A78BFA&text_color=CBD5E1
+          path: profile/pin-rxconcile-dark.svg
+          token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Pin card pin-spec-gen-dark.svg
+        uses: readme-tools/github-readme-stats-action@v2
+        with:
+          card: pin
+          options: username=yash-1105&repo=spec-gen&description_lines_count=2&hide_border=true&bg_color=00000000&title_color=22D3EE&icon_color=A78BFA&text_color=CBD5E1
+          path: profile/pin-spec-gen-dark.svg
+          token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Stats card stats-light.svg
+        uses: readme-tools/github-readme-stats-action@v2
+        with:
+          card: stats
+          options: username=yash-1105&show_icons=true&rank_icon=percentile&include_all_commits=true&ring_color=6D28D9&hide_border=true&bg_color=00000000&title_color=0E7490&icon_color=6D28D9&text_color=334155
+          path: profile/stats-light.svg
+          token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Top languages langs-light.svg
+        uses: readme-tools/github-readme-stats-action@v2
+        with:
+          card: top-langs
+          options: username=yash-1105&layout=compact&langs_count=6&hide=jupyter%20notebook,html,css,javascript,shell,makefile,dockerfile,plpgsql,procfile&hide_border=true&bg_color=00000000&title_color=0E7490&icon_color=6D28D9&text_color=334155
+          path: profile/langs-light.svg
+          token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Pin card pin-transport-sahayak-light.svg
+        uses: readme-tools/github-readme-stats-action@v2
+        with:
+          card: pin
+          options: username=yash-1105&repo=transport-sahayak&description_lines_count=2&hide_border=true&bg_color=00000000&title_color=0E7490&icon_color=6D28D9&text_color=334155
+          path: profile/pin-transport-sahayak-light.svg
+          token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Pin card pin-rxconcile-light.svg
+        uses: readme-tools/github-readme-stats-action@v2
+        with:
+          card: pin
+          options: username=yash-1105&repo=rxconcile&description_lines_count=2&hide_border=true&bg_color=00000000&title_color=0E7490&icon_color=6D28D9&text_color=334155
+          path: profile/pin-rxconcile-light.svg
+          token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Pin card pin-spec-gen-light.svg
+        uses: readme-tools/github-readme-stats-action@v2
+        with:
+          card: pin
+          options: username=yash-1105&repo=spec-gen&description_lines_count=2&hide_border=true&bg_color=00000000&title_color=0E7490&icon_color=6D28D9&text_color=334155
+          path: profile/pin-spec-gen-light.svg
+          token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Activity graph activity-dark.svg
+        uses: maurodesouza/github-readme-activity-graph-action@v1
+        with:
+          username: yash-1105
+          options: username=yash-1105&bg_color=00000000&hide_border=true&custom_title=Commit%20activity&radius=8&area=true&color=CBD5E1&title_color=22D3EE&line=A78BFA&point=22D3EE&area_color=6366F1
+          output_path: profile/activity-dark.svg
+          token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Activity graph activity-light.svg
+        uses: maurodesouza/github-readme-activity-graph-action@v1
+        with:
+          username: yash-1105
+          options: username=yash-1105&bg_color=00000000&hide_border=true&custom_title=Commit%20activity&radius=8&area=true&color=334155&title_color=0E7490&line=6D28D9&point=0E7490&area_color=A5B4FC
+          output_path: profile/activity-light.svg
+          token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Commit cards
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add profile/*.svg
+          git commit -m "chore: refresh profile cards" || exit 0
+          git push
